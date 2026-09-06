@@ -5,6 +5,7 @@
 import { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
+  BackHandler,
   ScrollView,
   View,
   Text,
@@ -19,7 +20,7 @@ import Chip from '../components/Chip';
 import CardResultado from '../components/CardResultado';
 import ItemHistorico from '../components/ItemHistorico';
 import { consultarMecanico } from '../services/aiService';
-import { lerHistorico, salvarConsulta } from '../services/historico';
+import { lerHistorico, salvarConsulta, excluirConsulta } from '../services/historico';
 import { cores, raio } from '../theme/cores';
 
 // Níveis de experiência. O valor escolhido é enviado à IA,
@@ -40,11 +41,27 @@ export default function HomeScreen() {
   const [erro, setErro] = useState('');
   const [historico, setHistorico] = useState([]);
 
-  // Carrega o historico salvo quando a tela abre pela primeira vez.
+  // Carrega o histórico salvo quando a tela abre pela primeira vez.
   // O array vazio como segundo argumento faz isso rodar uma unica vez.
   useEffect(() => {
     lerHistorico().then(setHistorico);
   }, []);
+
+  // Intercepta o botão físico de voltar do Android.
+  // Estando na tela de resultado, retorna a entrada em vez de fechar o app.
+  // No iOS não há botão equivalente, entao este efeito não surte efeito la.
+  useEffect(() => {
+    const inscricao = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (resposta !== null) {
+        novaConsulta();
+        return true; // informa ao Android que o evento foi tratado
+      }
+      return false; // na tela inicial, mantem o comportamento padrao
+    });
+
+    // Remove o ouvinte quando a tela e desmontada, evitando vazamento
+    return () => inscricao.remove();
+  }, [resposta]);
 
   // Envia a consulta à IA e trata os três desfechos possíveis:
   // sucesso, falha, e o encerramento do carregamento em qualquer caso.
@@ -90,12 +107,18 @@ export default function HomeScreen() {
     setErro('');
   }
 
+  // Remove uma consulta salva e atualiza a lista na tela.
+  async function removerDoHistorico(id) {
+    const lista = await excluirConsulta(id);
+    setHistorico(lista);
+  }
+
   return (
     <SafeAreaView style={estilos.tela}>
       <StatusBar barStyle="dark-content" />
       <ScrollView contentContainerStyle={estilos.conteudo}>
         <Text style={estilos.titulo}>Garagem DIY IA</Text>
-        <Text style={estilos.subtitulo}>Seu mecânico de bolso</Text>
+        <Text style={estilos.subtitulo}>Guia, materiais e dicas para o seu projeto</Text>
 
         {resposta === null ? (
           // ----- TELA DE ENTRADA -----
@@ -140,6 +163,7 @@ export default function HomeScreen() {
                     pergunta={item.pergunta}
                     nivel={item.nivel}
                     aoTocar={() => abrirDoHistorico(item)}
+                    aoExcluir={() => removerDoHistorico(item.id)}
                   />
                 ))}
               </View>
@@ -158,7 +182,7 @@ export default function HomeScreen() {
                   <Text style={estilos.botaoTexto}>Consultando...</Text>
                 </View>
               ) : (
-                <Text style={estilos.botaoTexto}>Consultar mecânico</Text>
+                <Text style={estilos.botaoTexto}>Gerar guia</Text>
               )}
             </Pressable>
           </View>
@@ -192,7 +216,7 @@ export default function HomeScreen() {
 
 const estilos = StyleSheet.create({
   tela: { flex: 1, backgroundColor: cores.fundo },
-  conteudo: { padding: 20, paddingBottom: 80 },
+  conteudo: { padding: 20, paddingBottom: 24 },
 
   titulo: { fontSize: 24, fontWeight: '600', color: cores.textoPrimario, marginTop: 20 },
   subtitulo: { fontSize: 14, color: cores.textoSecundario, marginBottom: 24 },

@@ -1,4 +1,3 @@
-// App.js
 // Ponto de entrada do aplicativo. Apenas monta a tela principal.
 
 import { SafeAreaProvider } from 'react-native-safe-area-context';

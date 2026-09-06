@@ -1,5 +1,4 @@
 // Paleta e medidas compartilhadas pelo aplicativo.
-// Centralizar aqui evita repetir valores nos componentes
 
 export const cores = {
   fundo: '#f5f5f0',

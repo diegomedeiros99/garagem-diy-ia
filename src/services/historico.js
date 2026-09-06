@@ -1,13 +1,13 @@
 // src/services/historico.js
 // Guarda as ultimas consultas no armazenamento local do aparelho.
-// A tela nao conhece o mecanismo de gravacao - apenas chama estas funcoes.
+// A tela não conhece o mecanismo de gravação - apenas chama estas funções.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CHAVE = '@garagem_historico';
 const LIMITE = 3; // quantidade de consultas mantidas
 
-// Le a lista salva. Devolve array vazio se nao houver nada
+// Lê a lista salva. Devolve array vazio se não houver nada
 // ou se o conteudo estiver corrompido.
 export async function lerHistorico() {
   try {
@@ -26,7 +26,7 @@ export async function salvarConsulta(pergunta, nivel, resposta) {
     const atual = await lerHistorico();
 
     const nova = {
-      id: String(Date.now()), // identificador unico para a lista
+      id: String(Date.now()), // identificador único para a lista
       pergunta,
       nivel,
       resposta,
@@ -39,6 +39,20 @@ export async function salvarConsulta(pergunta, nivel, resposta) {
     return atualizada;
   } catch (e) {
     // Falha ao gravar nao pode interromper o uso do aplicativo
+    return await lerHistorico();
+  }
+
+}
+
+// Remove uma consulta especifica pelo identificador.
+// Devolve a lista atualizada para a tela exibir.
+export async function excluirConsulta(id) {
+  try {
+    const atual = await lerHistorico();
+    const atualizada = atual.filter((item) => item.id !== id);
+    await AsyncStorage.setItem(CHAVE, JSON.stringify(atualizada));
+    return atualizada;
+  } catch (e) {
     return await lerHistorico();
   }
 }

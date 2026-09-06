@@ -1,7 +1,7 @@
 // src/services/aiService.js
-// Comunicacao com a API do Google Gemini.
+// Comunicação com a API do Google Gemini.
 // A tela chama consultarMecanico() e recebe um objeto com quatro campos.
-// Nenhum componente visual conhece detalhes da API - toda a integracao vive aqui.
+// Nenhum componente visual conhece detalhes da API - toda a integração vive aqui.
 
 // A chave vem do arquivo .env (nunca fica escrita no codigo).
 const CHAVE = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
@@ -39,7 +39,7 @@ Responda EXATAMENTE neste formato, sem markdown e sem texto fora dos marcadores:
 [DICA DE OURO]
 ...`;
 
-// Divide o texto bruto da IA nas quatro secoes.
+// Divide o texto bruto da IA nas quatro seções.
 // Se algum marcador faltar, o campo fica vazio em vez de quebrar o app.
 function separarSecoes(texto) {
   const secoes = { alerta: '', materiais: '', passos: '', dica: '' };
@@ -55,7 +55,7 @@ function separarSecoes(texto) {
     const inicio = texto.indexOf(marcador);
     if (inicio === -1) return;
 
-    // O fim desta secao e o inicio da proxima (ou o fim do texto).
+    // O fim desta seção e o inicio da próxima (ou o fim do texto).
     const proximoMarcador = marcadores[i + 1];
     let fim = texto.length;
     if (proximoMarcador) {
@@ -74,7 +74,7 @@ function separarSecoes(texto) {
   return secoes;
 }
 
-// Funcao principal: envia a descricao e o nivel, devolve as secoes separadas.
+// Funcao principal: envia a descrição e o nível, devolve as seções separadas.
 export async function consultarMecanico(descricao, nivel) {
   const resposta = await fetch(URL, {
     method: 'POST',
