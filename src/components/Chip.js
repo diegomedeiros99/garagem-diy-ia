@@ -1,7 +1,8 @@
 // src/components/Chip.js
-// Botao pequeno usado tanto na selecao de nivel quanto nos exemplos.
+// Botão pequeno usado tanto na seleção de nível quanto nos exemplos.
 
 import { Pressable, Text, StyleSheet } from 'react-native';
+import { cores, raio } from '../theme/cores';
 
 export default function Chip({ texto, ativo = false, largura, aoTocar }) {
   return (
@@ -18,13 +19,13 @@ const estilos = StyleSheet.create({
   chip: {
     paddingVertical: 8,
     paddingHorizontal: 14,
-    borderRadius: 8,
+    borderRadius: raio,
     borderWidth: 1,
-    borderColor: '#ddd',
-    backgroundColor: '#fff',
+    borderColor: cores.borda,
+    backgroundColor: cores.superficie,
   },
   largo: { width: '100%', marginBottom: 8 },
-  ativo: { backgroundColor: '#1a4d7a', borderColor: '#1a4d7a' },
-  texto: { fontSize: 13, color: '#555' },
-  textoAtivo: { color: '#fff' },
+  ativo: { backgroundColor: cores.primaria, borderColor: cores.primaria },
+  texto: { fontSize: 13, color: cores.textoChip },
+  textoAtivo: { color: cores.superficie },
 });

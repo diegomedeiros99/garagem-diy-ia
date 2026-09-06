@@ -4,6 +4,7 @@
 // ou destaque (âmbar, usado na dica de ouro).
 
 import { View, Text, StyleSheet } from 'react-native';
+import { cores, raioCard } from '../theme/cores';
 
 export default function CardResultado({ titulo, texto, variante = 'padrao', icone }) {
   const ehAlerta = variante === 'alerta';
@@ -55,31 +56,31 @@ export default function CardResultado({ titulo, texto, variante = 'padrao', icon
 
 const estilos = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
+    backgroundColor: cores.superficie,
+    borderRadius: raioCard,
     borderWidth: 1,
-    borderColor: '#e5e5e5',
+    borderColor: cores.bordaCard,
     padding: 16,
     marginBottom: 12,
   },
-  cardAlerta: { backgroundColor: '#fdeaea', borderColor: '#e8b4b4' },
+  cardAlerta: { backgroundColor: cores.alertaFundo, borderColor: cores.alertaBorda },
   cardDestaque: {
-    backgroundColor: '#fdf6e8',
-    borderColor: '#e8cf9a',
+    backgroundColor: cores.destaqueFundo,
+    borderColor: cores.destaqueBorda,
     borderLeftWidth: 4, // faixa lateral que reforça o destaque
-    borderLeftColor: '#c98a15',
+    borderLeftColor: cores.destaqueFaixa,
   },
 
   cabecalho: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
-  icone: { fontSize: 16, marginRight: 8, color: '#1a1a1a' },
-  iconeAlerta: { color: '#a32d2d' },
-  iconeDestaque: { color: '#8a5c06' },
+  icone: { fontSize: 16, marginRight: 8, color: cores.textoPrimario },
+  iconeAlerta: { color: cores.alertaTitulo },
+  iconeDestaque: { color: cores.destaqueTitulo },
 
-  titulo: { fontSize: 15, fontWeight: '600', color: '#1a1a1a' },
-  tituloAlerta: { color: '#a32d2d' },
-  tituloDestaque: { color: '#8a5c06' },
+  titulo: { fontSize: 15, fontWeight: '600', color: cores.textoPrimario },
+  tituloAlerta: { color: cores.alertaTitulo },
+  tituloDestaque: { color: cores.destaqueTitulo },
 
-  texto: { fontSize: 14, color: '#444', lineHeight: 22 },
-  textoAlerta: { color: '#8b2626' },
-  textoDestaque: { color: '#6b4a08' },
+  texto: { fontSize: 14, color: cores.textoCorpo, lineHeight: 22 },
+  textoAlerta: { color: cores.alertaTexto },
+  textoDestaque: { color: cores.destaqueTexto },
 });

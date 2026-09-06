@@ -18,6 +18,7 @@ import {
 import Chip from '../components/Chip';
 import CardResultado from '../components/CardResultado';
 import { consultarMecanico } from '../services/aiService';
+import { cores, raio } from '../theme/cores';
 
 // Níveis de experiência. O valor escolhido é enviado à IA,
 // que adapta a linguagem e a profundidade da resposta.
@@ -119,7 +120,10 @@ export default function HomeScreen() {
               disabled={carregando} // impede toque duplo durante a consulta
             >
               {carregando ? (
-                <ActivityIndicator color="#fff" />
+                <View style={estilos.linhaCarregando}>
+                  <ActivityIndicator color={cores.superficie} />
+                  <Text style={estilos.botaoTexto}>Consultando...</Text>
+                </View>
               ) : (
                 <Text style={estilos.botaoTexto}>Consultar mecânico</Text>
               )}
@@ -154,38 +158,39 @@ export default function HomeScreen() {
 }
 
 const estilos = StyleSheet.create({
-  tela: { flex: 1, backgroundColor: '#f5f5f0' },
+  tela: { flex: 1, backgroundColor: cores.fundo },
   conteudo: { padding: 20, paddingBottom: 80 },
 
-  titulo: { fontSize: 24, fontWeight: '600', color: '#1a1a1a', marginTop: 20 },
-  subtitulo: { fontSize: 14, color: '#666', marginBottom: 24 },
+  titulo: { fontSize: 24, fontWeight: '600', color: cores.textoPrimario, marginTop: 20 },
+  subtitulo: { fontSize: 14, color: cores.textoSecundario, marginBottom: 24 },
 
   campo: {
     borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
+    borderColor: cores.borda,
+    borderRadius: raio,
     padding: 12,
     minHeight: 90,
     fontSize: 15,
-    backgroundColor: '#fff',
+    backgroundColor: cores.superficie,
     textAlignVertical: 'top', // Android: texto começa no topo do campo
   },
 
-  rotulo: { fontSize: 13, color: '#666', marginTop: 20, marginBottom: 8 },
+  rotulo: { fontSize: 13, color: cores.textoSecundario, marginTop: 20, marginBottom: 8 },
   linhaChips: { flexDirection: 'row', gap: 8 },
 
   botao: {
-    backgroundColor: '#1a4d7a',
-    borderRadius: 8,
+    backgroundColor: cores.primaria,
+    borderRadius: raio,
     padding: 15,
     alignItems: 'center',
     marginTop: 24,
   },
   botaoInativo: { opacity: 0.6 },
-  botaoTexto: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  botaoTexto: { color: cores.superficie, fontSize: 16, fontWeight: '600' },
+  linhaCarregando: { flexDirection: 'row', alignItems: 'center', gap: 10 },
 
   erro: {
-    color: '#a32d2d',
+    color: cores.alertaTitulo,
     fontSize: 13,
     marginTop: 16,
     textAlign: 'center',
