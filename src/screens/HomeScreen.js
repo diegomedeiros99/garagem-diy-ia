@@ -2,7 +2,7 @@
 // Tela principal. Alterna entre o formulário de entrada e o resultado,
 // conforme o estado "resposta" esteja vazio ou preenchido.
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   ScrollView,
@@ -17,7 +17,9 @@ import {
 
 import Chip from '../components/Chip';
 import CardResultado from '../components/CardResultado';
+import ItemHistorico from '../components/ItemHistorico';
 import { consultarMecanico } from '../services/aiService';
+import { lerHistorico, salvarConsulta } from '../services/historico';
 import { cores, raio } from '../theme/cores';
 
 // Níveis de experiência. O valor escolhido é enviado à IA,
@@ -36,6 +38,13 @@ export default function HomeScreen() {
   const [resposta, setResposta] = useState(null);
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState('');
+  const [historico, setHistorico] = useState([]);
+
+  // Carrega o historico salvo quando a tela abre pela primeira vez.
+  // O array vazio como segundo argumento faz isso rodar uma unica vez.
+  useEffect(() => {
+    lerHistorico().then(setHistorico);
+  }, []);
 
   // Envia a consulta à IA e trata os três desfechos possíveis:
   // sucesso, falha, e o encerramento do carregamento em qualquer caso.
@@ -48,6 +57,10 @@ export default function HomeScreen() {
     try {
       const resultado = await consultarMecanico(entrada, nivel);
       setResposta(resultado);
+
+      // Guarda a consulta e atualiza a lista exibida na tela
+      const lista = await salvarConsulta(entrada, nivel, resultado);
+      setHistorico(lista);
     }  catch (e) {
       console.log('Erro na consulta:', e.message);
 
@@ -68,6 +81,12 @@ export default function HomeScreen() {
   function novaConsulta() {
     setResposta(null);
     setEntrada('');
+    setErro('');
+  }
+
+  // Reexibe uma consulta anterior sem chamar a API.
+  function abrirDoHistorico(item) {
+    setResposta(item.resposta);
     setErro('');
   }
 
@@ -111,6 +130,20 @@ export default function HomeScreen() {
                 aoTocar={() => setEntrada(item)}
               />
             ))}
+
+            {historico.length > 0 && (
+              <View>
+                <Text style={estilos.rotulo}>Consultas recentes</Text>
+                {historico.map((item) => (
+                  <ItemHistorico
+                    key={item.id}
+                    pergunta={item.pergunta}
+                    nivel={item.nivel}
+                    aoTocar={() => abrirDoHistorico(item)}
+                  />
+                ))}
+              </View>
+            )}
 
             {erro !== '' && <Text style={estilos.erro}>{erro}</Text>}
 
