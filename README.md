@@ -100,7 +100,7 @@ A separação segue o princípio de isolar responsabilidades. Os componentes des
 
 **Proibição explícita de inventar especificações.** Modelos de linguagem produzem valores de torque e capacidade de fluidos com confiança mesmo quando não os conhecem. O prompt determina que esses números nunca sejam gerados, e que o usuário seja remetido ao manual do veículo.
 
-**Escolha do modelo.** Os testes começaram com `gemini-3-flash-preview`, que apresentou recusas frequentes por alta demanda e tempos de resposta acima de quinze segundos no nível avançado. O `gemini-flash-lite-latest` mostrou-se mais rápido e disponível, ao custo de eventual inconsistência de acentuação nas respostas geradas — limitação considerada aceitável diante do ganho de confiabilidade.
+**Escolha do modelo.** Os testes começaram com `gemini-3-flash-preview`, que apresentou recusas frequentes por alta demanda e tempos de resposta acima de quinze segundos no nível avançado. O `gemini-flash-lite-latest` mostrou-se mais rápido e disponível, ao custo de eventual inconsistência de acentuação nas respostas geradas limitação considerada aceitável diante do ganho de confiabilidade.
 
 **Busca na web desativada.** A API oferece integração com o Google Search, que melhora a precisão em perguntas específicas, como códigos de erro de modelos determinados. O recurso foi deixado de fora para reduzir a complexidade da integração e por ter cobrança própria, separada do consumo de tokens.
 
